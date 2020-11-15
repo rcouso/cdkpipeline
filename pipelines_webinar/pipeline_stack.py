@@ -4,6 +4,8 @@ from aws_cdk.pipelines import CdkPipeline, SimpleSynthAction
 import aws_cdk.aws_codepipeline as codepipeline
 import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 
+from webservice_stage import WebServiceStage
+
 class PipelineStack(Stack):
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
@@ -33,3 +35,8 @@ class PipelineStack(Stack):
                 synth_command="cdk synth"
             )
         )
+
+        pipeline.add_application_stage(WebServiceStage(self, 'Pre-Prod', env={
+            'account': '282334958158',
+            'region' : 'eu-west-1'
+        }))
