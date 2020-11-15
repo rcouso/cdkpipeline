@@ -5,6 +5,7 @@ import aws_cdk.aws_codepipeline as codepipeline
 import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 
 from webservice_stage import WebServiceStage
+from argparse import _get_action_name
 
 class PipelineStack(Stack):
 
@@ -36,7 +37,15 @@ class PipelineStack(Stack):
             )
         )
 
-        pipeline.add_application_stage(WebServiceStage(self, 'Pre-Prod', env={
+        pre_prod_stage = pipeline.add_application_stage(WebServiceStage(self, 'Pre-Prod', env={
+            'account': '282334958158',
+            'region' : 'eu-west-1'
+        }))
+
+        pre_prod_stage.add_manual_approval_action(
+            action_name =  "PromoteToProd")
+
+        pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
         }))
