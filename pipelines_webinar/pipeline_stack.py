@@ -22,7 +22,8 @@ class PipelineStack(Stack):
                 trigger=codepipeline_actions.GitHubTrigger.POLL,
                 # Replace these with your actual GitHub project info
                 owner="rcouso",
-                repo="cdkpipeline"),
+                repo="cdkpipeline",
+                branch="main"),
             synth_action=SimpleSynthAction(
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
