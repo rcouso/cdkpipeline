@@ -13,4 +13,6 @@ PipelineStack(app, 'PipelineStack', env={
     'region' : 'eu-west-1'
 })
 
+# Test build by commit
+
 app.synth()
