@@ -53,7 +53,10 @@ aws-cdk.cx-api==1.73.0
 aws-cdk.pipelines==1.73.0
 aws-cdk.region-info==1.73.0
 cattrs==1.1.1
+certifi==2020.11.8
+chardet==3.0.4
 constructs==3.2.28
+idna==2.10
 importlib-metadata==2.0.0
 iniconfig==1.1.1
 jsii==1.14.1
@@ -65,7 +68,9 @@ py==1.9.0
 pyparsing==2.4.7
 pytest==6.1.2
 python-dateutil==2.8.1
+requests==2.25.0
 six==1.15.0
 toml==0.10.2
 typing-extensions==3.7.4.3
+urllib3==1.26.2
 zipp==3.4.0

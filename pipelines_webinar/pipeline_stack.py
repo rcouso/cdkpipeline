@@ -1,5 +1,5 @@
 from aws_cdk.core import Stack, StackProps, Construct, SecretValue
-from aws_cdk.pipelines import CdkPipeline, SimpleSynthAction
+from aws_cdk.pipelines import CdkPipeline, SimpleSynthAction, ShellScriptAction
 
 import aws_cdk.aws_codepipeline as codepipeline
 import aws_cdk.aws_codepipeline_actions as codepipeline_actions
@@ -38,13 +38,22 @@ class PipelineStack(Stack):
             )
         )
 
-        pre_prod_stage = pipeline.add_application_stage(WebServiceStage(self, 'Pre-Prod', env={
+        pre_prod_app = WebServiceStage(self, 'Pre-Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
+        })
+        pre_prod_stage = pipeline.add_application_stage(pre_prod_app)
+        pre_prod_stage.add_actions(ShellScriptAction(
+            action_name="Integ",
+            run_order=pre_prod_stage.next_sequential_run_order(),
+            additional_artifacts=[source_artifact],
+            commands=[
+                "pip install -r requirements.txt",
+                "pytest pipelines_webinar/integtests",
+            ],
+        use_outputs={
+            "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
         }))
-
-        pre_prod_stage.add_manual_approval_action(
-            action_name =  "PromoteToProd")
 
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
