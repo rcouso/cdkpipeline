@@ -1,5 +1,5 @@
 def handler(event, context):
     return {
-        'body': 'Hello from Lambda change code',
+        'body': 'Hello from Lambda',
         'statusCode': '200'
     }

@@ -54,7 +54,7 @@ class PipelineStack(Stack):
         use_outputs={
             "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
         }))
-
+        pre_prod_stage.add_manual_approval_action(action_name="PromoteToPro")
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
