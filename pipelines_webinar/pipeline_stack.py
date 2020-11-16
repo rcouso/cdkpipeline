@@ -5,7 +5,6 @@ import aws_cdk.aws_codepipeline as codepipeline
 import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 
 from webservice_stage import WebServiceStage
-from argparse import _get_action_name
 
 class PipelineStack(Stack):
 

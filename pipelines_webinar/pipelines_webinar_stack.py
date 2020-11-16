@@ -5,6 +5,7 @@ from aws_cdk import core
 import aws_cdk.aws_lambda as lmb
 import aws_cdk.aws_apigateway as apigw
 import aws_cdk.aws_codedeploy as codedeploy
+import aws_cdk.aws_cloudwatch as cloudwatch
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -24,7 +25,19 @@ class PipelinesWebinarStack(core.Stack):
         gw = apigw.LambdaRestApi(self, 'Gateway',
             description='Endpoint for a singple Lambda-powered web service',
             handler=alias)
+        failure_alarm=cloudwatch.Alarm(self, "FailureAlarm",
+            metric=cloudwatch.Metric(
+                metric_name="5XXError",
+                namespace="AWS/ApiGateway",
+                dimensions={
+                    "ApiName": "Gateway",
+                },
+                statistic="Sum",
+                period=core.Duration.minutes(1)),
+            threshold=1,
+            evaluation_periods=1)
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
-            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)
+            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,
+                alarms=[failure_alarm])
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)
