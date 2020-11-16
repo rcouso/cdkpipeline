@@ -24,7 +24,7 @@ class PipelinesWebinarStack(core.Stack):
         gw = apigw.LambdaRestApi(self, 'Gateway',
             description='Endpoint for a singple Lambda-powered web service',
             handler=alias)
-        codedeploy.LambdaDeploymentGroup(self,
+        codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)
