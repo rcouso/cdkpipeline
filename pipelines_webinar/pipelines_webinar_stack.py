@@ -6,6 +6,8 @@ import aws_cdk.aws_lambda as lmb
 import aws_cdk.aws_apigateway as apigw
 import aws_cdk.aws_codedeploy as codedeploy
 import aws_cdk.aws_cloudwatch as cloudwatch
+import aws_cdk.aws_cloudwatch_actions as cw_actions
+import aws_cdk.aws_sns as sns
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -36,6 +38,8 @@ class PipelinesWebinarStack(core.Stack):
                 period=core.Duration.minutes(1)),
             threshold=1,
             evaluation_periods=1)
+        alarm500topic = sns.Topic(self, "Alarm500Topic")
+        failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,
