@@ -32,7 +32,7 @@ class PipelineStack(Stack):
                 # Use this if you need a build step (if you're not using ts-node
                 # or if you have TypeScript Lambdas that need to be compiled).
                 install_command="npm install -g aws-cdk && pip install -r requirements.txt",
-                build_command="pytest pipelines_webinar/unittests",
+                # UNIT TEST build_command="pytest pipelines_webinar/unittests",
                 synth_command="cdk synth"
             )
         )
@@ -42,6 +42,7 @@ class PipelineStack(Stack):
             'region' : 'eu-west-1'
         })
         pre_prod_stage = pipeline.add_application_stage(pre_prod_app)
+        """ INTEGRATION TEST
         pre_prod_stage.add_actions(ShellScriptAction(
             action_name="Integ",
             run_order=pre_prod_stage.next_sequential_run_order(),
@@ -53,7 +54,8 @@ class PipelineStack(Stack):
         use_outputs={
             "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
         }))
-        pre_prod_stage.add_manual_approval_action(action_name="PromoteToPro")
+        """
+        """ MANUAL APPROVAL pre_prod_stage.add_manual_approval_action(action_name='PromoteToPro')"""
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
