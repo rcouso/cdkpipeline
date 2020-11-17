@@ -8,6 +8,7 @@ import aws_cdk.aws_codedeploy as codedeploy
 import aws_cdk.aws_cloudwatch as cloudwatch
 import aws_cdk.aws_cloudwatch_actions as cw_actions
 import aws_cdk.aws_sns as sns
+from aws_cdk.aws_apigateway import EndpointType
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -26,7 +27,8 @@ class PipelinesWebinarStack(core.Stack):
             version=handler.current_version)
         gw = apigw.LambdaRestApi(self, 'Gateway',
             description='Endpoint for a singple Lambda-powered web service',
-            handler=alias)
+            handler=alias,
+            endpoint_types=[EndpointType.REGIONAL])
         """
         failure_alarm=cloudwatch.Alarm(self, "FailureAlarm",
             metric=cloudwatch.Metric(
