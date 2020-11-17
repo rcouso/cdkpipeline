@@ -40,10 +40,10 @@ class PipelinesWebinarStack(core.Stack):
             threshold=1,
             evaluation_periods=1)
         alarm500topic = sns.Topic(self, "Alarm500Topic")
-        failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))"""
+        failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
-            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)
+            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)"""
         """ ALARMA,
                 alarms=[failure_alarm])"""
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)
