@@ -12,6 +12,7 @@ from aws_cdk.aws_apigateway import EndpointType
 import aws_cdk.aws_dynamodb as dynamodb
 from aws_cdk.aws_dynamodb import Attribute
 import aws_cdk.custom_resources as cr
+from aws_cdk.custom_resources import AwsSdkCall
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -51,14 +52,15 @@ class PipelinesWebinarStack(core.Stack):
         # Create a dynamodb table
         table = dynamodb.Table(self, "TestTable", partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
         table_name = cr.PhysicalResourceId.of(table.table_name)
-        cr.AwsCustomResource(self, "TestTableCustomResource", on_create={
-                'action':'putItem',
-                'service':'DynamoDB',
-                'physical_resource_id': table_name,
-                'parameters':{
-                    'Item' : {'id' : {'S': 'HOLA'}}
+        cr.AwsCustomResource(self, "TestTableCustomResource", on_create=AwsSdkCall(
+                action='putItem',
+                service='DynamoDB',
+                physical_resource_id=table_name,
+                parameters={
+                    'Item' : {'id' : {'S': 'HOLA'}},
+                    'TableName' : 'TestTable5769773A'
                 }
-            },
+        ),
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
         )
         # OUTPUT
