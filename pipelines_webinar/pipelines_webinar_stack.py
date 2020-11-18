@@ -50,7 +50,7 @@ class PipelinesWebinarStack(core.Stack):
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,alarms=[failure_alarm])
         # Create a dynamodb table
-        table = dynamodb.Table(self, "TestTable", partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
+        table = dynamodb.Table(self, "TestTable", table_name='TestTablePre', partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
         table_name = cr.PhysicalResourceId.of(table.table_name)
         cr.AwsCustomResource(self, "TestTableCustomResource", on_create=AwsSdkCall(
                 action='putItem',
@@ -58,7 +58,7 @@ class PipelinesWebinarStack(core.Stack):
                 physical_resource_id=table_name,
                 parameters={
                     'Item' : {'id' : {'S': 'HOLA'}},
-                    'TableName' : 'TestTable5769773A'
+                    'TableName' : 'TestTablePre'
                 }
         ),
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
