@@ -35,7 +35,7 @@ class PipelinesWebinarStack(core.Stack):
             description='Endpoint for a singple Lambda-powered web service',
             handler=alias,
             endpoint_types=[EndpointType.REGIONAL])
-        failure_alarm=cloudwatch.Alarm(self, "FailureAlarm", alarm_name=self.stack_name + '-' + '5XXAlarm',
+        failure_alarm=cloudwatch.Alarm(self, "FailureAlarm", alarm_name=self.stack_name + '-' + '500Alarm',
             metric=cloudwatch.Metric(
                 metric_name="5XXError",
                 namespace="AWS/ApiGateway",
@@ -46,29 +46,41 @@ class PipelinesWebinarStack(core.Stack):
                 period=core.Duration.minutes(1)),
             threshold=1,
             evaluation_periods=1)
-        alarm500topic = sns.Topic(self, "Alarm500Topic", topic_name=self.stack_name + '-' +'Alarm500Topic')
+        alarm500topic = sns.Topic(self, "Alarm500Topic", topic_name=self.stack_name + '-' +'Alarm500TopicSNS')
         failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,alarms=[failure_alarm])
         # Create a dynamodb table
-        """
-        table_name = self.stack_name + '-' + 'TestTable'
+
+        table_name = self.stack_name + '-' + 'HelloCdkTable'
         table = dynamodb.Table(self, "TestTable", table_name=table_name, partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
         table_name_id = cr.PhysicalResourceId.of(table.table_name)
-        cr.AwsCustomResource(self, "TestTableCustomResource", on_create=AwsSdkCall(
+        on_create_action = AwsSdkCall(
                 action='putItem',
                 service='DynamoDB',
                 physical_resource_id=table_name_id,
                 parameters={
-                    'Item' : {'id' : {'S': 'HOLA'},
+                    'Item' : {'id' : {'S': 'HOLA_CREATE'},
                               'date': {'S': datetime.today().strftime('%Y-%m-%d')},
                               'epoch': {'N': str(int(time.time()))}},
                     'TableName' : table_name
                 }
-        ),
+        )
+        on_update_action = AwsSdkCall(
+                action='putItem',
+                service='DynamoDB',
+                physical_resource_id=table_name_id,
+                parameters={
+                    'Item' : {'id' : {'S': 'HOLA_UPDATE'},
+                              'date': {'S': datetime.today().strftime('%Y-%m-%d')},
+                              'epoch': {'N': str(int(time.time()))}},
+                    'TableName' : table_name
+                }
+        )
+        cr.AwsCustomResource(self, "TestTableCustomResource", on_create=on_create_action, on_update=on_update_action,
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
         )
-        """
+
         # OUTPUT
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)
