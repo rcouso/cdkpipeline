@@ -53,9 +53,9 @@ class PipelinesWebinarStack(core.Stack):
         cr.AwsCustomResource(self, "TestTableCustomResource", on_create={
                 'action':'putItem',
                 'service':'DynamoDB',
-                'physical_resource_id': cr.PhysicalResourceId.of(table._physical_name),
+                'physical_resource_id': cr.PhysicalResourceId.of(table.table_name),
                 'parameters':{
-                    'TableName': str(cr.PhysicalResourceId.of(table._physical_name)),
+                    'TableName': cr.PhysicalResourceId.of(table.table_name),
                     'Item' : {'id' : {'S': 'HOLA'}}
                 }
             },
