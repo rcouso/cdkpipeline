@@ -55,7 +55,8 @@ class PipelinesWebinarStack(core.Stack):
                 'service':'DynamoDB',
                 'physical_resource_id': cr.PhysicalResourceId.of(table._physical_name),
                 'parameters':{
-                    'id': 'HOLA CDK'
+                    'TableName': table._physical_name,
+                    'Item' : {'id' : 'HOLA'}
                 }
             },
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
