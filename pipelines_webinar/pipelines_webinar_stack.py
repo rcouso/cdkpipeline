@@ -55,7 +55,7 @@ class PipelinesWebinarStack(core.Stack):
                 'service':'DynamoDB',
                 'physical_resource_id': cr.PhysicalResourceId.of(table._physical_name),
                 'parameters':{
-                    'TableName': cr.PhysicalResourceId.of(table._physical_name),
+                    'TableName': str(cr.PhysicalResourceId.of(table._physical_name)),
                     'Item' : {'id' : {'S': 'HOLA'}}
                 }
             },
