@@ -9,6 +9,9 @@ import aws_cdk.aws_cloudwatch as cloudwatch
 import aws_cdk.aws_cloudwatch_actions as cw_actions
 import aws_cdk.aws_sns as sns
 from aws_cdk.aws_apigateway import EndpointType
+import aws_cdk.aws_dynamodb as dynamodb
+from aws_cdk.aws_dynamodb import Attribute
+import aws_cdk.custom_resources as cr
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -46,4 +49,17 @@ class PipelinesWebinarStack(core.Stack):
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)#,alarms=[failure_alarm])
+        # Create a dynamodb table
+        table = dynamodb.Table(self, "TestTable", partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
+        cr.AwsCustomResource(self, "TestTableCustomResource", on_create={
+                'action':'putItem',
+                'service':'DynamoDB',
+                'physical_resource_id': cr.PhysicalResourceId.of(table._physical_name),
+                'parameters':{
+                    'id': 'HOLA CDK'
+                }
+            },
+            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
+        )
+        # OUTPUT
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)

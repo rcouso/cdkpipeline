@@ -36,7 +36,7 @@ class PipelineStack(Stack):
                 synth_command="cdk synth"
             )
         )
-        # PRE STAGE
+
         pre_prod_app = WebServiceStage(self, 'Pre-Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
@@ -54,7 +54,6 @@ class PipelineStack(Stack):
             "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
         }))
         pre_prod_stage.add_manual_approval_action(action_name='PromoteToPro')
-        # PRO STAGE
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
