@@ -1,4 +1,6 @@
 from os import path
+from datetime import datetime
+import time
 
 from aws_cdk import core
 
@@ -50,15 +52,18 @@ class PipelinesWebinarStack(core.Stack):
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,alarms=[failure_alarm])
         # Create a dynamodb table
-        table = dynamodb.Table(self, "TestTable", table_name='TestTablePre', partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
-        table_name = cr.PhysicalResourceId.of(table.table_name)
+        table_name = self.stack_name + '-' + 'TestTable'
+        table = dynamodb.Table(self, "TestTable", table_name=table_name, partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
+        table_name_id = cr.PhysicalResourceId.of(table.table_name)
         cr.AwsCustomResource(self, "TestTableCustomResource", on_create=AwsSdkCall(
                 action='putItem',
                 service='DynamoDB',
-                physical_resource_id=table_name,
+                physical_resource_id=table_name_id,
                 parameters={
-                    'Item' : {'id' : {'S': 'HOLA'}},
-                    'TableName' : 'TestTablePre'
+                    'Item' : {'id' : {'S': 'HOLA'},
+                              'date': {'S': datetime.today().strftime('%Y-%m-%d')},
+                              'epoch': {'N': str(int(time.time()))}},
+                    'TableName' : table_name
                 }
         ),
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)

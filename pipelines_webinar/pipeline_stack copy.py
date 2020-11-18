@@ -36,7 +36,7 @@ class PipelineStack(Stack):
                 synth_command="cdk synth"
             )
         )
-
+        # PRE STAGE
         pre_prod_app = WebServiceStage(self, 'Pre-Prod', env={
             'account': '282334958158',
             'region' : 'eu-west-1'
