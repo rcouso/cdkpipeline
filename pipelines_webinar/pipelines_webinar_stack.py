@@ -52,6 +52,7 @@ class PipelinesWebinarStack(core.Stack):
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,alarms=[failure_alarm])
         # Create a dynamodb table
+        """
         table_name = self.stack_name + '-' + 'TestTable'
         table = dynamodb.Table(self, "TestTable", table_name=table_name, partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
         table_name_id = cr.PhysicalResourceId.of(table.table_name)
@@ -68,5 +69,6 @@ class PipelinesWebinarStack(core.Stack):
         ),
             policy=cr.AwsCustomResourcePolicy.from_sdk_calls(resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE)
         )
+        """
         # OUTPUT
         self.url_output = core.CfnOutput(self, 'Url', value=gw.url)
