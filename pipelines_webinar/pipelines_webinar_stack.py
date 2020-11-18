@@ -35,7 +35,7 @@ class PipelinesWebinarStack(core.Stack):
             description='Endpoint for a singple Lambda-powered web service',
             handler=alias,
             endpoint_types=[EndpointType.REGIONAL])
-        failure_alarm=cloudwatch.Alarm(self, "FailureAlarm",
+        failure_alarm=cloudwatch.Alarm(self, "FailureAlarm", alarm_name=self.stack_name + '-' + '5XXAlarm',
             metric=cloudwatch.Metric(
                 metric_name="5XXError",
                 namespace="AWS/ApiGateway",
@@ -46,7 +46,7 @@ class PipelinesWebinarStack(core.Stack):
                 period=core.Duration.minutes(1)),
             threshold=1,
             evaluation_periods=1)
-        alarm500topic = sns.Topic(self, "Alarm500Topic")
+        alarm500topic = sns.Topic(self, "Alarm500Topic", topic_name=self.stack_name + '-' +'Alarm500Topic')
         failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
