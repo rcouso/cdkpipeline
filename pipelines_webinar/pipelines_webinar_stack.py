@@ -32,7 +32,6 @@ class PipelinesWebinarStack(core.Stack):
             description='Endpoint for a singple Lambda-powered web service',
             handler=alias,
             endpoint_types=[EndpointType.REGIONAL])
-        """
         failure_alarm=cloudwatch.Alarm(self, "FailureAlarm",
             metric=cloudwatch.Metric(
                 metric_name="5XXError",
@@ -45,10 +44,10 @@ class PipelinesWebinarStack(core.Stack):
             threshold=1,
             evaluation_periods=1)
         alarm500topic = sns.Topic(self, "Alarm500Topic")
-        failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))"""
+        failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
-            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES)#,alarms=[failure_alarm])
+            deployment_config=codedeploy.LambdaDeploymentConfig.CANARY_10_PERCENT_10_MINUTES,alarms=[failure_alarm])
         # Create a dynamodb table
         table = dynamodb.Table(self, "TestTable", partition_key=Attribute(name="id", type=dynamodb.AttributeType.STRING))
         cr.AwsCustomResource(self, "TestTableCustomResource", on_create={
