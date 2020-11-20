@@ -46,6 +46,7 @@ class PipelinesWebinarStack(core.Stack):
                 period=core.Duration.minutes(1)),
             threshold=1,
             evaluation_periods=1)
+
         alarm500topic = sns.Topic(self, "Alarm500Topic", topic_name=self.stack_name + '-' +'Alarm500TopicSNS')
         failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
