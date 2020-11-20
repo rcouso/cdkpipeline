@@ -15,6 +15,7 @@ import aws_cdk.aws_dynamodb as dynamodb
 from aws_cdk.aws_dynamodb import Attribute
 import aws_cdk.custom_resources as cr
 from aws_cdk.custom_resources import AwsSdkCall
+import aws_cdk.aws_sns_subscriptions as subscriptions
 
 class PipelinesWebinarStack(core.Stack):
 
@@ -48,6 +49,7 @@ class PipelinesWebinarStack(core.Stack):
             evaluation_periods=1)
 
         alarm500topic = sns.Topic(self, "Alarm500Topic", topic_name=self.stack_name + '-' +'Alarm500TopicSNS')
+        alarm500topic.add_subscription(subscriptions.EmailSubscription("ruben.couso.next@bbva.com"))
         failure_alarm.add_alarm_action(cw_actions.SnsAction(alarm500topic))
         codedeploy.LambdaDeploymentGroup(self,"DeploymentGroup",
             alias=alias,
