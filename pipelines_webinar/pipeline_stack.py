@@ -55,7 +55,7 @@ class PipelineStack(Stack):
                 "pip install -r requirements.txt",
                 "pytest pipelines_webinar/integtests",
                 # coverage
-                "pip install converage",
+                "pip install coverage",
                 "coverage run -m pipelines_webinar/unittests discover",
                 "(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
             ],
