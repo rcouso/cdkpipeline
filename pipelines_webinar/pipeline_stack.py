@@ -55,10 +55,10 @@ class PipelineStack(Stack):
                 "pip install -r requirements.txt",
                 "pytest pipelines_webinar/integtests",
                 # coverage
-                "pip install coverage",
-                "coverage run -a --source pipelines_webinar/unittests",
-                "coverage run -a --source pipelines_webinar/integtests",
-                "bash pipelines_webinar/coverage.sh"
+                # "pip install coverage",
+                # "coverage run -a --source pipelines_webinar/unittests",
+                # "coverage run -a --source pipelines_webinar/integtests",
+                # "bash pipelines_webinar/coverage.sh"
             ],
 
         use_outputs={
