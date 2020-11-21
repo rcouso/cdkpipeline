@@ -5,6 +5,7 @@ import aws_cdk.aws_codepipeline as codepipeline
 import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 
 from webservice_stage import WebServiceStage
+from aws_cdk.aws_codebuild import BuildEnvironment
 
 class PipelineStack(Stack):
 
@@ -46,10 +47,16 @@ class PipelineStack(Stack):
             action_name="Integ",
             run_order=pre_prod_stage.next_sequential_run_order(),
             additional_artifacts=[source_artifact],
+            environment=BuildEnvironment(environment_variables={'CODECOV_TOKEN':'9e4d7998-7a8e-45a2-81fe-8a9c761cb03a'}),
             commands=[
                 "pip install -r requirements.txt",
                 "pytest pipelines_webinar/integtests",
+                # coverage
+                "pip install converage",
+                "coverage run -m pipelines_webinar/unittests discover",
+                "(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
             ],
+
         use_outputs={
             "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
         }))
