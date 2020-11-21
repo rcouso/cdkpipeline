@@ -58,7 +58,7 @@ class PipelineStack(Stack):
                 "pip install coverage",
                 "coverage run -a --source pipelines_webinar/unittests",
                 "coverage run -a --source pipelines_webinar/integtests",
-                "(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
+                "bash pipelines_webinar/coverage.sh"
             ],
 
         use_outputs={
