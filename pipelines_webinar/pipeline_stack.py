@@ -56,7 +56,8 @@ class PipelineStack(Stack):
                 "pytest pipelines_webinar/integtests",
                 # coverage
                 "pip install coverage",
-                "coverage run -m pipelines_webinar/unittests discover",
+                "coverage run -a --source pipelines_webinar/unittests",
+                "coverage run -a --source pipelines_webinar/integtests",
                 "(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
             ],
 
