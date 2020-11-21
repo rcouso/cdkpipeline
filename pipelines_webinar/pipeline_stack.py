@@ -47,7 +47,8 @@ class PipelineStack(Stack):
             action_name="Integ",
             run_order=pre_prod_stage.next_sequential_run_order(),
             additional_artifacts=[source_artifact],
-            environment=BuildEnvironment(environment_variables={'CODECOV_TOKEN':'9e4d7998-7a8e-45a2-81fe-8a9c761cb03a'}),
+            environment=BuildEnvironment(
+                environment_variables={'CODECOV_TOKEN':aws_codebuild.BuildEnvironmentVariable(value='9e4d7998-7a8e-45a2-81fe-8a9c761cb03a')}),
             commands=[
                 "pip install -r requirements.txt",
                 "pytest pipelines_webinar/integtests",
