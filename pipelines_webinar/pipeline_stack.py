@@ -7,6 +7,8 @@ import aws_cdk.aws_codepipeline_actions as codepipeline_actions
 from webservice_stage import WebServiceStage
 from aws_cdk.aws_codebuild import BuildEnvironment
 
+from aws_cdk import aws_codebuild
+
 class PipelineStack(Stack):
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
