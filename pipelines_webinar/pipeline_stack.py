@@ -39,15 +39,15 @@ class PipelineStack(Stack):
                 synth_command="cdk synth"
             )
         )
-        # PRE STAGE
-        pre_prod_app = WebServiceStage(self, 'Pre-Prod', env={
-            'account': '282334958158',
+        # DEV STAGE
+        dev_app = WebServiceStage(self, 'Dev', env={
+            'account': '722610601746',
             'region' : 'eu-west-1'
         })
-        pre_prod_stage = pipeline.add_application_stage(pre_prod_app)
-        pre_prod_stage.add_actions(ShellScriptAction(
+        dev_stage = pipeline.add_application_stage(dev_app)
+        dev_stage.add_actions(ShellScriptAction(
             action_name="Integ",
-            run_order=pre_prod_stage.next_sequential_run_order(),
+            run_order=dev_stage.next_sequential_run_order(),
             additional_artifacts=[source_artifact],
             environment=BuildEnvironment(
                 environment_variables={'CODECOV_TOKEN':aws_codebuild.BuildEnvironmentVariable(value='9e4d7998-7a8e-45a2-81fe-8a9c761cb03a')}),
@@ -63,9 +63,9 @@ class PipelineStack(Stack):
             ],
 
         use_outputs={
-            "SERVICE_URL": pipeline.stack_output(pre_prod_app.url_output)
+            "SERVICE_URL": pipeline.stack_output(dev_app.url_output)
         }))
-        pre_prod_stage.add_manual_approval_action(action_name='PromoteToPro')
+        dev_stage.add_manual_approval_action(action_name='PromoteToPro')
         # PRO STAGE
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
             'account': '282334958158',
