@@ -41,7 +41,7 @@ class PipelineStack(Stack):
         )
         # DEV STAGE
         dev_app = WebServiceStage(self, 'Dev', env={
-            'account': '722610601746',
+            'account': '282334958158',
             'region' : 'eu-west-1'
         })
         dev_stage = pipeline.add_application_stage(dev_app)
