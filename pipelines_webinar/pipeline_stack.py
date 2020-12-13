@@ -41,7 +41,7 @@ class PipelineStack(Stack):
         )
         # DEV STAGE
         dev_app = WebServiceStage(self, 'Dev', env={
-            'account': '282334958158',
+            'account': '722610601746',
             'region' : 'eu-west-1'
         })
         dev_stage = pipeline.add_application_stage(dev_app)
@@ -68,6 +68,6 @@ class PipelineStack(Stack):
         dev_stage.add_manual_approval_action(action_name='PromoteToPro')
         # PRO STAGE
         pipeline.add_application_stage(WebServiceStage(self, 'Prod', env={
-            'account': '282334958158',
+            'account': '807034265755',
             'region' : 'eu-west-1'
         }))
