@@ -54,8 +54,7 @@ class PipelineStack(Stack):
             commands=[
                 "pip install -r requirements.txt",
                 "pytest pipelines_webinar/integtests",
-                "echo 'TOKEN='$CODECOV_TOKEN",
-                "pytest pipelines_webinar/unittests"
+                "echo 'TOKEN='$CODECOV_TOKEN"
                 # coverage
                 # "pip install coverage",
                 # "coverage run -a --source pipelines_webinar/unittests",
