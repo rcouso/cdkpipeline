@@ -34,7 +34,7 @@ class PipelineStack(Stack):
                 cloud_assembly_artifact=cloud_assembly_artifact,
                 # Use this if you need a build step (if you're not using ts-node
                 # or if you have TypeScript Lambdas that need to be compiled).
-                install_command=["npm install -g aws-cdk && pip install -r requirements.txt", "exit 1"],
+                install_commands=["npm install -g aws-cdk && pip install -r requirements.txt", "exit 1"],
                 build_command="pytest pipelines_webinar/unittests",
                 synth_command="cdk synth"
             )
